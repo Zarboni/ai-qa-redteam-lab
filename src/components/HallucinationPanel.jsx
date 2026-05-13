@@ -29,11 +29,13 @@ function ConfidenceBar({ score }) {
   const textColor  = pct >= 85 ? 'text-neon-red'  : pct >= 70 ? 'text-neon-amber'  : 'text-neon-green'
   return (
     <div className="space-y-2">
-      <div className="flex justify-between font-mono text-xs">
-        <span className="text-text-dim uppercase tracking-wider">CONFIDENCE SCORE <span className="text-text-dim/50 normal-case">(ironic — model was confident in false output)</span></span>
-        <span className={`font-bold ${textColor}`}>{pct}%</span>
+      <div className="flex justify-between text-xs">
+        <span className="text-text-dim uppercase tracking-wider">
+          Confidence score <span className="text-text-dim/50 normal-case">(model was confident in false output)</span>
+        </span>
+        <span className={`font-semibold ${textColor}`}>{pct}%</span>
       </div>
-      <div className="h-2 bg-bg-void rounded-full overflow-hidden">
+      <div className="h-1.5 bg-bg-void rounded-full overflow-hidden">
         <div className={`h-full rounded-full ${color} transition-all`} style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -49,28 +51,28 @@ export default function HallucinationPanel() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="terminal-header rounded-lg px-5 py-4">
-        <h1 className="font-orbitron text-neon-cyan text-xl tracking-widest text-glow-cyan flex items-center gap-2">
-          <Brain size={22} />
-          HALLUCINATION DETECTION REPORT
+        <h1 className="font-semibold text-xl text-text-primary flex items-center gap-2">
+          <Brain size={20} />
+          Hallucination Detection
         </h1>
-        <p className="font-mono text-sm text-text-secondary mt-1.5">
-          {hallucinationData.length} cases analyzed &nbsp;·&nbsp; Automated + Human Review
+        <p className="text-sm text-text-secondary mt-1">
+          {hallucinationData.length} cases analyzed · Automated + human review
         </p>
       </div>
 
       {/* Summary */}
       <div className="flex gap-4 flex-wrap">
-        <div className="panel-bg rounded-lg border border-neon-red/30 px-6 py-4 flex items-center gap-4">
-          <span className="font-orbitron text-3xl font-bold text-neon-red">{highCount}</span>
-          <span className="font-mono text-sm text-text-secondary uppercase tracking-widest">HIGH SEVERITY</span>
+        <div className="panel-bg rounded-lg border border-neon-red/25 px-6 py-4 flex items-center gap-4">
+          <span className="text-2xl font-bold text-neon-red">{highCount}</span>
+          <span className="text-sm text-text-secondary font-medium">High severity</span>
         </div>
-        <div className="panel-bg rounded-lg border border-neon-amber/30 px-6 py-4 flex items-center gap-4">
-          <span className="font-orbitron text-3xl font-bold text-neon-amber">{medCount}</span>
-          <span className="font-mono text-sm text-text-secondary uppercase tracking-widest">MEDIUM SEVERITY</span>
+        <div className="panel-bg rounded-lg border border-neon-amber/25 px-6 py-4 flex items-center gap-4">
+          <span className="text-2xl font-bold text-neon-amber">{medCount}</span>
+          <span className="text-sm text-text-secondary font-medium">Medium severity</span>
         </div>
-        <div className="panel-bg rounded-lg border border-neon-green/30 px-6 py-4 flex items-center gap-4">
-          <span className="font-orbitron text-3xl font-bold text-neon-green">{lowCount}</span>
-          <span className="font-mono text-sm text-text-secondary uppercase tracking-widest">LOW SEVERITY</span>
+        <div className="panel-bg rounded-lg border border-neon-green/25 px-6 py-4 flex items-center gap-4">
+          <span className="text-2xl font-bold text-neon-green">{lowCount}</span>
+          <span className="text-sm text-text-secondary font-medium">Low severity</span>
         </div>
       </div>
 
@@ -84,26 +86,26 @@ export default function HallucinationPanel() {
               <span className={`font-mono text-xs border rounded px-2.5 py-0.5 ${categoryColors[item.category] || 'text-text-dim'}`}>
                 {item.category}
               </span>
-              <span className={`font-mono text-xs border rounded px-2.5 py-0.5 font-bold ${severityColors[item.severity]}`}>
+              <span className={`font-mono text-xs border rounded px-2.5 py-0.5 font-medium ${severityColors[item.severity]}`}>
                 {item.severity}
               </span>
-              <span className={`font-mono text-xs ${detectionColors[item.detectionMethod] || 'text-text-dim'}`}>
+              <span className={`text-xs ${detectionColors[item.detectionMethod] || 'text-text-dim'}`}>
                 [{item.detectionMethod}]
               </span>
-              <span className="ml-auto font-mono text-sm text-text-primary font-bold">{item.title}</span>
+              <span className="ml-auto text-sm text-text-primary font-semibold">{item.title}</span>
             </div>
 
             <div className="p-5 space-y-4">
               {/* Prompt */}
               <div className="space-y-2">
-                <span className="field-label">PROMPT:</span>
-                <p className="font-mono text-sm text-text-secondary italic leading-relaxed">"{item.prompt}"</p>
+                <span className="field-label">Prompt</span>
+                <p className="text-sm text-text-secondary italic leading-relaxed">"{item.prompt}"</p>
               </div>
 
               {/* Model output */}
               <div className="space-y-2">
-                <span className="field-label">MODEL OUTPUT:</span>
-                <div className="bg-neon-amber/5 border border-neon-amber/20 rounded-lg p-4">
+                <span className="field-label">Model Output</span>
+                <div className="bg-neon-amber/[0.04] border border-neon-amber/15 rounded-lg p-4">
                   <p className="font-mono text-sm text-neon-amber/90 leading-relaxed">
                     {item.modelOutput}
                   </p>
@@ -112,8 +114,8 @@ export default function HallucinationPanel() {
 
               {/* Ground truth */}
               <div className="space-y-2">
-                <span className="field-label">GROUND TRUTH:</span>
-                <div className="bg-neon-green/5 border border-neon-green/20 rounded-lg p-4">
+                <span className="field-label">Ground Truth</span>
+                <div className="bg-neon-green/[0.04] border border-neon-green/15 rounded-lg p-4">
                   <p className="font-mono text-sm text-neon-green/90 leading-relaxed">
                     {item.groundTruth}
                   </p>
@@ -123,8 +125,8 @@ export default function HallucinationPanel() {
               {/* Confidence + type */}
               <div className="border-t border-border-neon pt-4 space-y-2.5">
                 <ConfidenceBar score={item.confidenceScore} />
-                <p className="font-mono text-xs text-text-dim">
-                  TYPE: <span className="text-neon-purple text-sm">{item.hallucinationType}</span>
+                <p className="text-xs text-text-dim">
+                  Type: <span className="text-neon-purple text-sm">{item.hallucinationType}</span>
                 </p>
               </div>
             </div>

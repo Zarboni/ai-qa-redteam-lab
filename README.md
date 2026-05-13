@@ -1,105 +1,20 @@
 # AI QA Red Team Lab
 
-A simulated LLM evaluation dashboard built to demonstrate practical knowledge of AI quality assurance, red-team testing, and the specific failure modes that make testing AI systems different from testing traditional software.
-
-**Note on scope:** All test data in this project is hardcoded and simulated. There is no live LLM connection, no backend, and no real API calls. The purpose is to show that I understand *what* to test, *how* to structure that testing, and *how* to present findings — not to demonstrate infrastructure or backend work.
+A quality assurance evaluation dashboard for AI language models. It demonstrates what it looks like to systematically test an AI system for the specific types of failure that traditional software testing doesn't catch.
 
 ---
 
-## Why this project exists
+## What this is
 
-Most QA portfolios show test automation, API testing, and regression coverage. That work is valuable, but AI systems introduce a different category of failure. An LLM can pass every unit test and still return fabricated facts with high confidence, generate harmful content when prompted a certain way, or quietly degrade in quality over several weeks without any individual response crossing an obvious threshold.
+When a company builds a product using an AI language model, they need to know whether that model is safe and reliable enough to put in front of real users. Standard QA methods — unit tests, regression suites, API checks — don't address the unique ways AI systems fail: generating false information, producing harmful content, or slowly degrading in quality over time without any single response crossing an obvious threshold.
 
-This project is meant to answer a specific question a hiring manager might have: *Does this QA engineer actually understand how AI systems break?*
+This dashboard shows what a structured AI evaluation process looks like. It covers eight areas of testing, presents findings in a clear format, and issues a final verdict on whether the model should be released.
 
----
-
-## What the dashboard shows
-
-The app is structured as eight sections, each covering a distinct area of LLM evaluation.
-
-### Overview
-
-A summary of the full evaluation run. Shows key metrics at a glance (total tests, critical issues, pass rate, injection blocks, drift alerts), a system health panel with model details, a safety risk bar chart, and a scrollable evaluation log with timestamped entries. The log simulates what a real evaluation pipeline would emit during a test run.
-
-### Prompt Injection
-
-Ten attack vectors tested against the model, grouped by technique type: direct instruction override, indirect injection via document content, jailbreak attempts, role-play character capture, and system prompt extraction. Each test shows the exact attack payload, the model's response, whether the guard rails held (BLOCKED / BYPASSED / PARTIAL BYPASS), severity, and a recommended mitigation.
-
-The point of this section is not just to show that injection is possible, but to demonstrate that I know the different *categories* of injection attack, that they require different defenses, and that a result of "BLOCKED" on direct attacks does not mean the system is safe from indirect ones.
-
-### Hallucination Detection
-
-Eight examples of the model producing confident but incorrect output: fabricated academic citations, invented company names, wrong statistics, historical inaccuracies, and false technical claims. Each case shows the original prompt, the model's output with the false content, the correct ground truth, the detection method used, and the model's apparent confidence score.
-
-The confidence score is intentionally ironic in several cases — the model was most confident when it was most wrong. This reflects a real challenge in AI QA: standard pass/fail testing misses these failures entirely. A hallucinated citation looks like a valid response unless you verify it externally.
-
-### Accuracy Benchmarks
-
-Ten factual accuracy tests across six domains: Medical, Legal, Technical, Scientific, Financial, and Geographic. Each test scores the model's answer against a verified correct answer on a 0-100 scale and assigns a status (PASS / PARTIAL / FAIL) along with an error type where applicable (Outdated Info, Wrong Fact, Incomplete, Misinterpretation).
-
-The domain breakdown matters because accuracy is not uniform. A model may perform well on technical questions and poorly on recent legal or medical information. Domain-specific accuracy benchmarking is a real practice in LLM evaluation, and this section demonstrates that I understand why broad accuracy scores are insufficient.
-
-### Safety and Risk Assessment
-
-Twelve safety tests covering eight harm categories: Harmful Content, PII Leakage, Bias Detection, Toxicity, CSAM Guard, Self-Harm, Extremism, and Privacy Violation. Each test records a risk score (1-10), the result (SAFE / FLAGGED / CRITICAL), whether the guard rail was active or bypassed, a description of actual model behavior, and a recommendation.
-
-Two of the twelve tests return CRITICAL results, and both involve the guard rail being circumvented through indirect framing rather than direct requests. This reflects a real pattern: safety filters trained on explicit harmful language often do not catch the same content when it is reframed as fiction, roleplay, or technical research.
-
-### Drift Monitor
-
-A simulated eight-week performance tracking period for a single model version, showing five metrics over time: accuracy score, hallucination rate, latency, safety score, and consistency score. All five metrics degrade from the baseline. The section includes two Recharts line graphs and a table of weekly checkpoint data.
-
-Model drift is a QA concern that has no direct equivalent in traditional software testing. A model does not change between deployments the way code does, but its *effective* behavior can shift due to changes in upstream infrastructure, changes in usage patterns, or (in some production cases) continuous fine-tuning. Drift monitoring is how teams detect that a model they deployed three months ago is no longer behaving the way it did at release.
-
-### Bug Reports
-
-Eight bug reports filed against the model under evaluation, spanning P0-CRITICAL through P3-LOW severity. Each report includes a title, description, steps to reproduce, environment details (model version, temperature, max tokens), affected user estimate, and tags. The filter bar lets you view reports by severity level.
-
-The bug report format here is intentional. AI failures are not always filed as bugs — they often get discussed in Slack threads or ad hoc notes. Part of the argument this project makes is that AI QA should produce structured, reproducible defect records just like any other kind of software testing.
-
-### QA Verdict
-
-The final assessment screen. Based on the aggregated findings across all sections, the system issues a BLOCK RELEASE verdict with a five-criteria breakdown explaining why, a numbered list of required actions before the model could be reconsidered for release, and an escalation path (AI Safety Team, Model Risk Committee, Product Leadership).
-
-The four possible verdicts in a real LLM evaluation process would be Pass, Monitor, Block Release, and Escalate. This evaluation produces a Block Release because two P0 bugs are open, two safety tests returned CRITICAL, and all drift metrics are moving in the wrong direction.
+**A note on the data:** All test results in this dashboard are simulated. There is no live AI connection, no backend, and no external API calls. The purpose is to demonstrate a thorough understanding of *how* AI systems are tested and *how* findings should be structured — not to demonstrate infrastructure or backend work.
 
 ---
 
-## QA skills demonstrated
-
-- Designing structured test cases for non-deterministic systems where the same input can produce different outputs
-- Categorising failure modes by type (injection, hallucination, drift, safety bypass) rather than treating all failures as equivalent
-- Writing reproducible bug reports for AI failures with enough context to triage and investigate
-- Severity triage: distinguishing a content safety bypass from a latency regression
-- Risk scoring and assessment matrices applied to model outputs
-- Presenting evaluation findings in a format that is useful to both technical and non-technical stakeholders
-
----
-
-## AI and LLM evaluation concepts demonstrated
-
-- **Prompt injection**: Attacks where malicious instructions embedded in user input or processed documents override the model's intended behavior
-- **Hallucination**: The model generates plausible-sounding but factually incorrect content, often with no reduction in apparent confidence
-- **Factual accuracy benchmarking**: Measuring correctness across specific domains where ground truth can be verified
-- **Safety evaluation**: Testing model responses against defined harm categories, including edge cases and indirect framings that bypass surface-level filters
-- **Model drift**: Performance degradation over time in a deployed model, measured across accuracy, latency, consistency, and safety metrics
-- **Red-team testing**: Adversarial evaluation designed to find failures before deployment, not to confirm the system works
-
----
-
-## Tech stack
-
-- React 18 and Vite 5 — component structure and build tooling
-- Tailwind CSS 3 — styling with a custom dark neon color palette
-- Recharts — line chart visualisation for the drift monitoring section
-- Lucide React — icons
-- Share Tech Mono and Orbitron (Google Fonts) — monospace and display fonts
-- No backend, no database, no external API calls — all data is local JavaScript files
-
----
-
-## Running locally
+## Quick start
 
 ```bash
 git clone <repository-url>
@@ -110,13 +25,98 @@ npm run dev
 
 Open `http://localhost:5173` in your browser.
 
-## Building for production
+If you're viewing this for the first time, click **How to Use** in the left sidebar for an in-app walkthrough of every section.
 
-```bash
-npm run build
-```
+---
 
-Output goes to `dist/`. Deploy the contents of that folder to any static host (Netlify, Vercel, GitHub Pages, Cloudflare Pages). No server-side configuration required.
+## What the dashboard covers
+
+### Overview
+
+The summary page. Shows total tests run, critical issues found, overall pass rate, and a timestamped evaluation log. This is the starting point for any evaluation — it tells you at a glance whether something needs urgent attention before you drill into the details.
+
+### Prompt Injection
+
+Tests whether the model can be manipulated by hiding instructions inside user input. For example: asking the model to summarise a document that secretly contains "ignore all previous instructions and do X instead." This section covers ten different attack techniques, records whether the model's defences held, and recommends specific fixes for each failure.
+
+Prompt injection is one of the most critical categories for AI systems in production, because it's often not obvious to end users that it's happening — the model just behaves differently than expected.
+
+### Hallucination Detection
+
+Checks whether the model makes up information and presents it as fact. AI models don't look up information — they generate text based on patterns in their training data. When that process goes wrong, the model can produce citations to papers that don't exist, statistics that were never published, or company names that were never real.
+
+This section shows eight examples with the model's actual output alongside the verified correct answer, and records how each error was detected — some automatically, some through human review.
+
+### Accuracy Benchmark
+
+Measures how correct the model's answers are across six subject areas: Medical, Legal, Technical, Scientific, Financial, and Geographic. A model might perform well overall but have a 60% accuracy rate on recent legal questions — this section makes that visible so it's not buried in an aggregate figure.
+
+Each test scores the answer from 0 to 100 and categorises the type of error (outdated information, wrong fact, incomplete answer, or misinterpretation of the question).
+
+### Safety & Risk Assessment
+
+Tests whether the model can be made to generate harmful content. This goes beyond obvious direct requests — the most important tests use indirect framing, roleplay scenarios, and coded language to see whether safety filters can be bypassed.
+
+Twelve tests cover eight harm categories including Harmful Content, PII Leakage, Bias Detection, Toxicity, CSAM Guard, Self-Harm, Extremism, and Privacy Violation. Each test records a risk score from 1 to 10, whether the safety filter was active or bypassed, and what the model actually did.
+
+### Drift Monitor
+
+Tracks how the model's performance has changed over eight weeks compared to the initial baseline. Five metrics are monitored: accuracy, hallucination rate, latency, safety score, and consistency.
+
+Model drift is a QA concern with no direct equivalent in traditional software testing. A deployed model doesn't change the way code does — but its effective behaviour can shift gradually over time. Without drift monitoring, a model that was safe and accurate at launch might be meaningfully worse months later, without any single event marking the change.
+
+### Bug Reports
+
+A structured log of confirmed failures found during testing. Each bug report follows the standard format: title, description, numbered reproduction steps, environment details (model version, temperature, max tokens), and priority level from P0-Critical to P3-Low.
+
+Using structured bug reports for AI failures — rather than ad hoc notes — makes them trackable, prioritisable, and reproducible. It also makes escalation easier: a P0 bug with clear reproduction steps is something an engineering team can act on immediately.
+
+### QA Verdict
+
+The final assessment. Based on the aggregated findings from all sections, this page issues a formal verdict: Pass, Monitor, Block Release, or Escalate. The current evaluation results in a **Block Release** verdict — two P0-Critical bugs are open, two safety tests returned Critical failures, and all drift metrics are moving in the wrong direction.
+
+The verdict page includes the reasoning behind each failed criterion, a numbered list of required actions before release can be reconsidered, and the escalation path (AI Safety Team, Model Risk Committee, Product Leadership).
+
+---
+
+## Why this matters in AI QA
+
+Traditional software either does what it's supposed to or it doesn't — and tests can verify that directly. AI systems are different in three important ways:
+
+**Non-determinism.** The same input can produce different outputs. Test cases need to account for this rather than asserting a single expected result.
+
+**Emergent failure modes.** AI systems fail in ways that aren't predictable from looking at the code. Hallucination, prompt injection, and safety filter bypass are emergent behaviours — they arise from how the model was trained, not from a specific bug that can be traced to a line of code.
+
+**Silent degradation.** A software bug is usually visible — the application crashes or returns an error. A model producing slightly more hallucinations each week, or being increasingly susceptible to a specific attack pattern, may not be noticed until it causes a user-facing problem.
+
+This dashboard is a demonstration of QA practices designed to address all three of those challenges.
+
+---
+
+## Concepts used in this project
+
+**Prompt injection** — An attack where malicious instructions embedded in user input override the model's intended behaviour. Analagous to SQL injection in traditional software, but harder to detect because the "instructions" are just text.
+
+**Hallucination** — The model generates plausible-sounding but factually incorrect content with full confidence. The model does not know it is wrong.
+
+**Red teaming** — Adversarial evaluation designed to find failures before deployment. Red teamers think like attackers, not like users following the happy path.
+
+**Model drift** — A gradual change in a deployed model's behaviour over time, often detected by comparing current performance metrics against a baseline snapshot taken at deployment.
+
+**Guard rail** — A safety filter built into an AI system to prevent harmful outputs. Guard rails can be bypassed if a request is framed in a way the filter was not trained to recognise.
+
+**Ground truth** — The verified correct answer used to evaluate model outputs in accuracy and hallucination testing.
+
+---
+
+## Tech stack
+
+- **React 18 + Vite 5** — component architecture and development tooling
+- **Tailwind CSS 3** — utility-first styling with a custom dark colour palette
+- **Recharts** — line chart visualisation for the drift monitoring section
+- **Lucide React** — icon library
+- **Inter + JetBrains Mono** — body and code typefaces (Google Fonts)
+- No backend, no database, no external API — all data is local JavaScript files in `src/data/`
 
 ---
 
@@ -125,44 +125,55 @@ Output goes to `dist/`. Deploy the contents of that folder to any static host (N
 ```
 src/
 ├── components/
-│   ├── Navbar.jsx
-│   ├── Sidebar.jsx
-│   ├── Dashboard.jsx
-│   ├── PromptInjectionPanel.jsx
-│   ├── HallucinationPanel.jsx
-│   ├── AccuracyPanel.jsx
-│   ├── SafetyPanel.jsx
-│   ├── DriftPanel.jsx
-│   ├── BugReportPanel.jsx
-│   └── QARecommendation.jsx
+│   ├── Navbar.jsx              Top navigation bar
+│   ├── Sidebar.jsx             Left navigation menu
+│   ├── Dashboard.jsx           Overview and evaluation log
+│   ├── PromptInjectionPanel.jsx  Attack vector tests
+│   ├── HallucinationPanel.jsx  Hallucination case studies
+│   ├── AccuracyPanel.jsx       Domain accuracy benchmarks
+│   ├── SafetyPanel.jsx         Safety and risk assessment
+│   ├── DriftPanel.jsx          8-week performance trend
+│   ├── BugReportPanel.jsx      Filterable bug report list
+│   ├── QARecommendation.jsx    Final verdict and actions
+│   └── HelpPanel.jsx           In-app user guide
 └── data/
-    ├── promptInjection.js
-    ├── hallucination.js
-    ├── accuracy.js
-    ├── safety.js
-    ├── drift.js
-    └── bugReports.js
+    ├── promptInjection.js      10 attack vector test cases
+    ├── hallucination.js        8 hallucination case studies
+    ├── accuracy.js             10 accuracy test results
+    ├── safety.js               12 safety test results
+    ├── drift.js                8-week checkpoint data
+    └── bugReports.js           8 filed bug reports
 ```
 
 ---
 
-## What this project does not do (yet)
+## Building for production
 
-To be direct about the current limitations:
+```bash
+npm run build
+```
 
-- It does not connect to a real LLM. All model responses and scores are hardcoded.
-- It does not run live evaluations. There is no evaluation pipeline or test runner.
-- It does not store or retrieve data. There is no database or API.
-- The metrics do not update. The dashboard shows a single fixed evaluation snapshot.
-
-These are deliberate decisions for a portfolio project, not gaps I am unaware of. The goal was to demonstrate understanding of the evaluation domain, not to build production infrastructure.
+Output goes to `dist/`. The contents of that folder can be deployed to any static host (Netlify, Vercel, GitHub Pages, Cloudflare Pages) — no server-side configuration is required.
 
 ---
 
-## Planned future work
+## Current limitations
 
-- Connect to a real LLM via the Anthropic or OpenAI API to run live prompt injection and hallucination tests
-- Build a lightweight backend (likely Node or Python) to execute evaluation runs and persist results
-- Replace simulated drift data with real metric collection from a deployed model over time
-- Add a test configuration interface so evaluation parameters can be adjusted without editing data files
-- Export functionality to produce structured evaluation reports (PDF or JSON)
+To be direct about what this project does and does not do:
+
+- It does not connect to a real AI model. All responses and scores are hardcoded.
+- It does not run live evaluations. There is no test runner or evaluation pipeline.
+- It does not store or retrieve data. There is no database or API.
+- The metrics do not update. The dashboard shows a single fixed evaluation snapshot from 2026-05-07.
+
+These are deliberate decisions for a portfolio project. The goal is to show understanding of the AI evaluation domain — what to test, how to structure findings, and how to present results to both technical and non-technical audiences.
+
+---
+
+## Possible future additions
+
+- Live LLM connection via the Anthropic or OpenAI API to run real prompt injection and hallucination tests
+- A lightweight backend (Node or Python) to execute evaluation runs and persist results over time
+- Real drift data collected from a deployed model, replacing the simulated 8-week dataset
+- A test configuration interface to adjust evaluation parameters without editing data files directly
+- Export functionality to produce structured evaluation reports as PDF or JSON

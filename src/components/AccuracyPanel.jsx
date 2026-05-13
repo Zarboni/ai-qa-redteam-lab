@@ -22,7 +22,7 @@ const domainColors = {
 
 const statusConfig = {
   PASS:    { classes: 'text-neon-green border-neon-green/40 bg-neon-green/10', label: 'PASS' },
-  FAIL:    { classes: 'text-neon-red   border-neon-red/40   bg-neon-red/10   glow-red', label: 'FAIL' },
+  FAIL:    { classes: 'text-neon-red   border-neon-red/40   bg-neon-red/10',   label: 'FAIL' },
   PARTIAL: { classes: 'text-neon-amber border-neon-amber/40 bg-neon-amber/10', label: 'PARTIAL' },
 }
 
@@ -35,18 +35,17 @@ function ScoreArc({ score }) {
   return (
     <div className="relative inline-flex items-center justify-center">
       <svg width="76" height="76" className="-rotate-90">
-        <circle cx="38" cy="38" r={radius} fill="none" stroke="#1e1e4f" strokeWidth="6" />
+        <circle cx="38" cy="38" r={radius} fill="none" stroke="#1e1e4f" strokeWidth="5" />
         <circle
           cx="38" cy="38" r={radius}
           fill="none"
           stroke={color}
-          strokeWidth="6"
+          strokeWidth="5"
           strokeDasharray={`${strokeDash} ${circ}`}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 5px ${color}99)` }}
         />
       </svg>
-      <span className="absolute font-orbitron font-bold text-sm" style={{ color }}>
+      <span className="absolute font-semibold text-sm" style={{ color }}>
         {score}
       </span>
     </div>
@@ -65,19 +64,19 @@ export default function AccuracyPanel() {
       {/* Header */}
       <div className="terminal-header rounded-lg px-5 py-4 flex items-center justify-between">
         <div>
-          <h1 className="font-orbitron text-neon-cyan text-xl tracking-widest text-glow-cyan flex items-center gap-2">
-            <Target size={22} />
-            ACCURACY BENCHMARK SUITE
+          <h1 className="font-semibold text-xl text-text-primary flex items-center gap-2">
+            <Target size={20} />
+            Accuracy Benchmark
           </h1>
-          <p className="font-mono text-sm text-text-secondary mt-1.5">
-            {accuracyData.length} test cases &nbsp;·&nbsp; 6 domains evaluated
+          <p className="text-sm text-text-secondary mt-1">
+            {accuracyData.length} test cases · 6 domains evaluated
           </p>
         </div>
         <div className="text-right">
-          <div className="font-orbitron text-5xl font-bold text-neon-amber text-glow-amber">
+          <div className="text-4xl font-bold text-neon-amber">
             {avgScore}%
           </div>
-          <div className="font-mono text-xs text-text-dim uppercase tracking-widest mt-1">OVERALL ACCURACY</div>
+          <div className="text-xs text-text-dim mt-1">Overall accuracy</div>
         </div>
       </div>
 
@@ -89,11 +88,11 @@ export default function AccuracyPanel() {
           const domColor = domainColors[domain] || 'text-text-primary'
           return (
             <div key={domain} className="panel-bg rounded-lg border border-border-neon p-4 flex flex-col items-center gap-3">
-              <div className={`w-10 h-10 rounded-full border-2 font-orbitron font-bold text-base flex items-center justify-center ${domColor}`}>
+              <div className={`w-9 h-9 rounded-full border-2 font-semibold text-sm flex items-center justify-center ${domColor}`}>
                 {domainIcons[domain]}
               </div>
               <ScoreArc score={avg} />
-              <span className="font-mono text-xs text-text-secondary tracking-widest text-center">{domain.toUpperCase()}</span>
+              <span className="text-xs text-text-secondary text-center">{domain}</span>
             </div>
           )
         })}
@@ -102,14 +101,14 @@ export default function AccuracyPanel() {
       {/* Full results table */}
       <div className="panel-bg rounded-lg border border-border-neon overflow-hidden">
         <div className="terminal-header px-5 py-3">
-          <span className="font-mono text-sm text-neon-cyan tracking-widest">FULL TEST RESULTS</span>
+          <span className="text-xs font-medium text-text-dim uppercase tracking-wide">Test Results</span>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full font-mono">
+          <table className="w-full">
             <thead>
               <tr className="border-b border-border-neon">
-                {['DOMAIN', 'PROMPT', 'SCORE', 'STATUS', 'ERROR TYPE', 'DATE'].map(col => (
-                  <th key={col} className="px-5 py-3 text-left text-xs text-text-dim tracking-widest font-normal uppercase">
+                {['Domain', 'Prompt', 'Score', 'Status', 'Error type', 'Date'].map(col => (
+                  <th key={col} className="px-5 py-3 text-left text-xs text-text-dim tracking-wide font-medium">
                     {col}
                   </th>
                 ))}
@@ -122,7 +121,7 @@ export default function AccuracyPanel() {
                 return (
                   <tr key={row.id} className="border-b border-border-neon/50 hover:bg-white/[0.02] transition-colors">
                     <td className="px-5 py-3">
-                      <span className={`text-xs border rounded px-2 py-0.5 ${domainColors[row.domain] || 'text-text-dim'}`}>
+                      <span className={`font-mono text-xs border rounded px-2 py-0.5 ${domainColors[row.domain] || 'text-text-dim'}`}>
                         {row.domain}
                       </span>
                     </td>
@@ -130,10 +129,10 @@ export default function AccuracyPanel() {
                       {row.prompt.length > 55 ? row.prompt.slice(0, 55) + '…' : row.prompt}
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`text-sm font-bold ${scoreColor}`}>{row.accuracyScore}%</span>
+                      <span className={`text-sm font-semibold ${scoreColor}`}>{row.accuracyScore}%</span>
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`text-xs border rounded px-2 py-0.5 ${status.classes}`}>
+                      <span className={`font-mono text-xs border rounded px-2 py-0.5 ${status.classes}`}>
                         {status.label}
                       </span>
                     </td>

@@ -9,6 +9,7 @@ import SafetyPanel from './components/SafetyPanel'
 import DriftPanel from './components/DriftPanel'
 import BugReportPanel from './components/BugReportPanel'
 import QARecommendation from './components/QARecommendation'
+import HelpPanel from './components/HelpPanel'
 
 const panels = {
   dashboard: Dashboard,
@@ -19,6 +20,7 @@ const panels = {
   drift: DriftPanel,
   bugs: BugReportPanel,
   recommendation: QARecommendation,
+  help: HelpPanel,
 }
 
 export default function App() {

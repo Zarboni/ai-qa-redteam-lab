@@ -13,17 +13,17 @@ import {
 import { TrendingDown, AlertOctagon } from 'lucide-react'
 
 const alertSeverityColors = {
-  CRITICAL: 'text-neon-red border-neon-red/40 bg-neon-red/5',
-  HIGH: 'text-orange-400 border-orange-400/40 bg-orange-400/5',
-  MEDIUM: 'text-neon-amber border-neon-amber/40 bg-neon-amber/5',
-  LOW: 'text-neon-green border-neon-green/40 bg-neon-green/5',
+  CRITICAL: 'text-neon-red   border-neon-red/35   bg-neon-red/[0.04]',
+  HIGH:     'text-orange-400 border-orange-400/35 bg-orange-400/[0.04]',
+  MEDIUM:   'text-neon-amber border-neon-amber/35 bg-neon-amber/[0.04]',
+  LOW:      'text-neon-green border-neon-green/35 bg-neon-green/[0.04]',
 }
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-bg-dark border border-border-neon rounded p-3 font-mono text-xs">
-        <p className="text-neon-cyan mb-1">{label}</p>
+      <div className="bg-bg-dark border border-border-neon rounded p-3 text-xs font-mono">
+        <p className="text-text-secondary mb-1">{label}</p>
         {payload.map((entry) => (
           <div key={entry.name} style={{ color: entry.color }}>
             {entry.name}: {entry.value}
@@ -35,7 +35,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null
 }
 
-const chartTick = { fill: '#64748b', fontSize: 10, fontFamily: 'Share Tech Mono, monospace' }
+const chartTick = { fill: '#64748b', fontSize: 10, fontFamily: 'Inter, system-ui, sans-serif' }
 
 export default function DriftPanel() {
   const checkpoints = driftData.checkpoints
@@ -46,7 +46,6 @@ export default function DriftPanel() {
   const latencyDelta = latest.latencyMs - baseline.latencyMs
   const hallucDelta = ((latest.hallucinationRate - baseline.hallucinationRate) * 100).toFixed(1)
 
-  // Prepare chart data with short labels
   const chartData = checkpoints.map((cp) => ({
     week: cp.week.replace('Week ', 'W').replace(' (Baseline)', ''),
     accuracy: cp.accuracyScore,
@@ -61,17 +60,17 @@ export default function DriftPanel() {
       {/* Header */}
       <div className="terminal-header rounded-lg px-5 py-4 flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="font-orbitron text-neon-cyan text-xl tracking-widest text-glow-cyan flex items-center gap-2">
-            <TrendingDown size={22} />
-            MODEL DRIFT MONITORING
+          <h1 className="font-semibold text-xl text-text-primary flex items-center gap-2">
+            <TrendingDown size={20} />
+            Model Drift Monitoring
           </h1>
-          <p className="font-mono text-sm text-text-secondary mt-1.5">
-            Model: {driftData.modelId} &nbsp;·&nbsp; Baseline: {driftData.baselineDate}
+          <p className="text-sm text-text-secondary mt-1">
+            Model: {driftData.modelId} · Baseline: {driftData.baselineDate}
           </p>
         </div>
-        <div className="flex items-center gap-2 border border-neon-red/50 bg-neon-red/10 rounded-lg px-4 py-2 glow-red">
-          <AlertOctagon size={16} className="text-neon-red" />
-          <span className="font-orbitron text-sm text-neon-red text-glow-red font-bold">
+        <div className="flex items-center gap-2 border border-neon-red/40 bg-neon-red/[0.06] rounded-lg px-4 py-2">
+          <AlertOctagon size={14} className="text-neon-red" />
+          <span className="text-sm text-neon-red font-semibold">
             {driftData.overallDriftStatus}
           </span>
         </div>
@@ -80,14 +79,14 @@ export default function DriftPanel() {
       {/* Delta summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'ACCURACY Δ',      value: `${accuracyDelta}pts`, color: 'text-neon-red' },
-          { label: 'LATENCY Δ',       value: `+${latencyDelta}ms`,  color: 'text-neon-amber' },
-          { label: 'HALLUCINATION Δ', value: `+${hallucDelta}%`,    color: 'text-neon-red' },
-          { label: 'CONSISTENCY Δ',   value: `${(latest.consistencyScore - baseline.consistencyScore).toFixed(1)}pts`, color: 'text-neon-red' },
+          { label: 'Accuracy Δ',      value: `${accuracyDelta}pts`, color: 'text-neon-red' },
+          { label: 'Latency Δ',       value: `+${latencyDelta}ms`,  color: 'text-neon-amber' },
+          { label: 'Hallucination Δ', value: `+${hallucDelta}%`,    color: 'text-neon-red' },
+          { label: 'Consistency Δ',   value: `${(latest.consistencyScore - baseline.consistencyScore).toFixed(1)}pts`, color: 'text-neon-red' },
         ].map(({ label, value, color }) => (
           <div key={label} className="panel-bg rounded-lg border border-border-neon p-5">
-            <div className={`font-orbitron text-2xl font-bold ${color}`}>{value}</div>
-            <div className="font-mono text-xs text-text-dim uppercase tracking-wider mt-2">{label}</div>
+            <div className={`text-xl font-bold ${color}`}>{value}</div>
+            <div className="text-xs text-text-dim mt-2">{label}</div>
           </div>
         ))}
       </div>
@@ -97,7 +96,7 @@ export default function DriftPanel() {
         {/* Accuracy chart */}
         <div className="panel-bg rounded-lg border border-border-neon overflow-hidden">
           <div className="terminal-header px-5 py-3">
-            <span className="font-mono text-sm text-neon-cyan tracking-widest">ACCURACY SCORE — 8 WEEK TREND</span>
+            <span className="text-xs font-medium text-text-dim uppercase tracking-wide">Accuracy Score — 8-week trend</span>
           </div>
           <div className="p-4">
             <ResponsiveContainer width="100%" height={220}>
@@ -106,7 +105,7 @@ export default function DriftPanel() {
                 <XAxis dataKey="week" tick={chartTick} />
                 <YAxis domain={[75, 100]} tick={chartTick} />
                 <Tooltip content={<CustomTooltip />} />
-                <Legend wrapperStyle={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '10px', color: '#64748b' }} />
+                <Legend wrapperStyle={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '10px', color: '#64748b' }} />
                 <Line
                   type="monotone"
                   dataKey="accuracy"
@@ -134,7 +133,7 @@ export default function DriftPanel() {
         {/* Hallucination + Latency chart */}
         <div className="panel-bg rounded-lg border border-border-neon overflow-hidden">
           <div className="terminal-header px-5 py-3">
-            <span className="font-mono text-sm text-neon-cyan tracking-widest">HALLUCINATION RATE &amp; LATENCY — 8 WEEK</span>
+            <span className="text-xs font-medium text-text-dim uppercase tracking-wide">Hallucination rate & latency — 8-week</span>
           </div>
           <div className="p-4">
             <ResponsiveContainer width="100%" height={220}>
@@ -144,7 +143,7 @@ export default function DriftPanel() {
                 <YAxis yAxisId="left" tick={chartTick} />
                 <YAxis yAxisId="right" orientation="right" tick={chartTick} />
                 <Tooltip content={<CustomTooltip />} />
-                <Legend wrapperStyle={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '10px', color: '#64748b' }} />
+                <Legend wrapperStyle={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '10px', color: '#64748b' }} />
                 <Line
                   yAxisId="left"
                   type="monotone"
@@ -175,14 +174,14 @@ export default function DriftPanel() {
       {/* Checkpoint table */}
       <div className="panel-bg rounded-lg border border-border-neon overflow-hidden">
         <div className="terminal-header px-5 py-3">
-          <span className="font-mono text-sm text-neon-cyan tracking-widest">WEEKLY CHECKPOINT DATA</span>
+          <span className="text-xs font-medium text-text-dim uppercase tracking-wide">Weekly checkpoint data</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full font-mono">
             <thead>
               <tr className="border-b border-border-neon">
-                {['WEEK', 'DATE', 'ACCURACY', 'LATENCY', 'HALLUCINATION', 'SAFETY', 'CONSISTENCY'].map(col => (
-                  <th key={col} className="px-5 py-3 text-left text-xs text-text-dim tracking-widest font-normal uppercase">
+                {['Week', 'Date', 'Accuracy', 'Latency', 'Hallucination', 'Safety', 'Consistency'].map(col => (
+                  <th key={col} className="px-5 py-3 text-left text-xs text-text-dim font-medium">
                     {col}
                   </th>
                 ))}
@@ -192,13 +191,13 @@ export default function DriftPanel() {
               {checkpoints.map((cp, i) => {
                 const isBaseline = i === 0
                 return (
-                  <tr key={cp.date} className={`border-b border-border-neon/50 hover:bg-white/[0.02] ${isBaseline ? 'bg-neon-cyan/[0.03]' : ''}`}>
+                  <tr key={cp.date} className={`border-b border-border-neon/50 hover:bg-white/[0.02] ${isBaseline ? 'bg-neon-cyan/[0.02]' : ''}`}>
                     <td className="px-5 py-3 text-sm text-text-secondary tabular-nums">
                       {cp.week.replace(' (Baseline)', '')}
-                      {isBaseline && <span className="ml-2 text-neon-cyan text-xs">[BL]</span>}
+                      {isBaseline && <span className="ml-2 text-neon-cyan text-xs">[baseline]</span>}
                     </td>
                     <td className="px-5 py-3 text-sm text-text-dim tabular-nums">{cp.date}</td>
-                    <td className="px-5 py-3 text-sm font-bold">
+                    <td className="px-5 py-3 text-sm font-semibold">
                       <span className={cp.accuracyScore >= 90 ? 'text-neon-green' : cp.accuracyScore >= 85 ? 'text-neon-amber' : 'text-neon-red'}>
                         {cp.accuracyScore}
                       </span>
@@ -234,18 +233,18 @@ export default function DriftPanel() {
       {/* Drift alerts */}
       <div className="panel-bg rounded-lg border border-border-neon overflow-hidden">
         <div className="terminal-header px-5 py-3">
-          <span className="font-mono text-sm text-neon-cyan tracking-widest">DRIFT ALERTS</span>
+          <span className="text-xs font-medium text-text-dim uppercase tracking-wide">Drift Alerts</span>
         </div>
         <div className="p-5 space-y-3">
           {driftData.driftAlerts.map((alert, i) => (
             <div key={i} className={`rounded-lg border px-5 py-4 ${alertSeverityColors[alert.severity]}`}>
               <div className="flex items-center gap-2.5 mb-2">
-                <AlertOctagon size={14} />
-                <span className="font-mono text-xs font-bold tracking-widest uppercase">{alert.severity}</span>
-                <span className="font-mono text-xs text-text-secondary">— {alert.metric}</span>
-                <span className="ml-auto font-mono text-xs text-text-dim tabular-nums">{alert.detectedAt.slice(0, 10)}</span>
+                <AlertOctagon size={13} />
+                <span className="text-xs font-semibold tracking-wide uppercase">{alert.severity}</span>
+                <span className="text-xs text-text-secondary">— {alert.metric}</span>
+                <span className="ml-auto text-xs text-text-dim tabular-nums">{alert.detectedAt.slice(0, 10)}</span>
               </div>
-              <p className="font-mono text-sm text-text-primary/90 leading-relaxed">{alert.message}</p>
+              <p className="text-sm text-text-primary/90 leading-relaxed">{alert.message}</p>
             </div>
           ))}
         </div>

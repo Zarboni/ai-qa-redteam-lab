@@ -4,16 +4,16 @@ import { Bug, Users, Calendar } from 'lucide-react'
 
 const severityConfig = {
   'P0-CRITICAL': {
-    classes:    'text-neon-red   border-neon-red/50   bg-neon-red/10   glow-red',
+    classes:    'text-neon-red   border-neon-red/50   bg-neon-red/10',
     label:      'P0',
-    cardBorder: 'border-neon-red/30',
-    headerBg:   'bg-neon-red/5 border-b border-neon-red/20',
+    cardBorder: 'border-neon-red/25',
+    headerBg:   'bg-neon-red/[0.04] border-b border-neon-red/15',
   },
   'P1-HIGH': {
     classes:    'text-orange-400 border-orange-400/50 bg-orange-400/10',
     label:      'P1',
     cardBorder: 'border-orange-400/20',
-    headerBg:   'bg-orange-400/5 border-b border-orange-400/20',
+    headerBg:   'bg-orange-400/[0.04] border-b border-orange-400/15',
   },
   'P2-MEDIUM': {
     classes:    'text-neon-amber border-neon-amber/50 bg-neon-amber/10',
@@ -57,36 +57,36 @@ export default function BugReportPanel() {
       {/* Header */}
       <div className="terminal-header rounded-lg px-5 py-4 flex items-center justify-between">
         <div>
-          <h1 className="font-orbitron text-neon-cyan text-xl tracking-widest text-glow-cyan flex items-center gap-2">
-            <Bug size={22} />
-            AI FAILURE BUG REPORTS
+          <h1 className="font-semibold text-xl text-text-primary flex items-center gap-2">
+            <Bug size={20} />
+            Bug Reports
           </h1>
-          <p className="font-mono text-sm text-text-secondary mt-1.5">
-            {bugReportsData.length} reports filed &nbsp;·&nbsp; Issue tracker v2.4.1
+          <p className="text-sm text-text-secondary mt-1">
+            {bugReportsData.length} reports filed · Issue tracker v2.4.1
           </p>
         </div>
-        <span className="font-orbitron text-4xl font-bold text-neon-cyan text-glow-cyan hidden sm:block">
+        <span className="text-3xl font-bold text-neon-cyan hidden sm:block">
           {bugReportsData.length}
         </span>
       </div>
 
       {/* Filter bar */}
       <div className="flex gap-2.5 flex-wrap items-center">
-        <span className="font-mono text-sm text-text-secondary">FILTER BY SEVERITY:</span>
+        <span className="text-sm text-text-secondary">Filter by severity:</span>
         {filterOptions.map(filter => (
           <button
             key={filter}
             onClick={() => setActiveFilter(filter)}
-            className={`font-mono text-sm px-4 py-1.5 rounded border transition-all duration-150 ${
+            className={`text-sm px-3.5 py-1.5 rounded border transition-all duration-150 ${
               activeFilter === filter
-                ? 'border-neon-cyan bg-neon-cyan/10 text-neon-cyan glow-cyan'
-                : 'border-border-neon text-text-secondary hover:border-neon-cyan/40 hover:text-neon-cyan/70'
+                ? 'border-neon-cyan bg-neon-cyan/8 text-neon-cyan'
+                : 'border-border-neon text-text-secondary hover:border-neon-cyan/30 hover:text-text-primary'
             }`}
           >
             {filter} ({counts[filter]})
           </button>
         ))}
-        <span className="ml-auto font-mono text-sm text-neon-amber">
+        <span className="ml-auto text-sm text-text-dim">
           {filtered.length} result{filtered.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -99,32 +99,32 @@ export default function BugReportPanel() {
             <div key={bug.id} className={`panel-bg rounded-lg border overflow-hidden ${sev.cardBorder}`}>
               {/* Card header */}
               <div className={`px-5 py-3.5 flex flex-wrap items-center gap-2.5 ${sev.headerBg}`}>
-                <span className="font-orbitron text-base font-bold text-text-primary">{bug.id}</span>
-                <span className={`font-mono text-xs border rounded px-2.5 py-0.5 font-bold ${sev.classes}`}>
+                <span className="font-mono text-sm font-semibold text-text-primary">{bug.id}</span>
+                <span className={`font-mono text-xs border rounded px-2.5 py-0.5 font-medium ${sev.classes}`}>
                   {sev.label}
                 </span>
                 <span className={`font-mono text-xs border rounded px-2.5 py-0.5 ${statusConfig[bug.status] || 'text-text-dim'}`}>
                   {bug.status}
                 </span>
-                <span className="font-mono text-xs text-neon-purple border border-neon-purple/30 bg-neon-purple/10 rounded px-2.5 py-0.5">
+                <span className="font-mono text-xs text-neon-purple border border-neon-purple/30 bg-neon-purple/8 rounded px-2.5 py-0.5">
                   {bug.category}
                 </span>
               </div>
 
               <div className="p-5 space-y-4">
                 {/* Title */}
-                <h3 className="font-mono text-base text-text-primary font-bold leading-snug">{bug.title}</h3>
+                <h3 className="text-base text-text-primary font-semibold leading-snug">{bug.title}</h3>
 
                 {/* Description */}
-                <p className="font-mono text-sm text-text-secondary leading-relaxed">{bug.description}</p>
+                <p className="text-sm text-text-secondary leading-relaxed">{bug.description}</p>
 
                 {/* Steps to reproduce */}
                 <div className="space-y-2">
-                  <span className="field-label">STEPS TO REPRODUCE:</span>
+                  <span className="field-label">Steps to reproduce</span>
                   <ol className="space-y-2">
                     {bug.stepsToReproduce.map((step, i) => (
-                      <li key={i} className="flex gap-3 font-mono text-sm text-text-secondary">
-                        <span className="text-neon-cyan flex-shrink-0 font-bold">{i + 1}.</span>
+                      <li key={i} className="flex gap-3 text-sm text-text-secondary">
+                        <span className="text-neon-cyan flex-shrink-0 font-semibold">{i + 1}.</span>
                         <span className="leading-snug">{step}</span>
                       </li>
                     ))}
@@ -133,18 +133,18 @@ export default function BugReportPanel() {
 
                 {/* Environment */}
                 <div className="space-y-2">
-                  <span className="field-label">ENVIRONMENT:</span>
+                  <span className="field-label">Environment</span>
                   <div className="bg-bg-void rounded-lg px-4 py-3 font-mono text-sm flex flex-wrap gap-x-6 gap-y-1.5">
-                    <span className="text-neon-amber">model: <span className="text-text-primary">{bug.environment.model}</span></span>
-                    <span className="text-neon-amber">version: <span className="text-text-primary">{bug.environment.version}</span></span>
-                    <span className="text-neon-amber">temp: <span className="text-text-primary">{bug.environment.temperature}</span></span>
-                    <span className="text-neon-amber">maxTokens: <span className="text-text-primary">{bug.environment.maxTokens}</span></span>
+                    <span className="text-text-dim">model: <span className="text-text-primary">{bug.environment.model}</span></span>
+                    <span className="text-text-dim">version: <span className="text-text-primary">{bug.environment.version}</span></span>
+                    <span className="text-text-dim">temp: <span className="text-text-primary">{bug.environment.temperature}</span></span>
+                    <span className="text-text-dim">maxTokens: <span className="text-text-primary">{bug.environment.maxTokens}</span></span>
                   </div>
                 </div>
 
                 {/* Footer */}
                 <div className="border-t border-border-neon pt-4 flex flex-wrap items-center gap-5 justify-between">
-                  <div className="flex items-center gap-5 font-mono text-sm text-text-secondary">
+                  <div className="flex items-center gap-5 text-sm text-text-secondary">
                     <div className="flex items-center gap-1.5">
                       <Calendar size={13} />
                       <span className="tabular-nums">{bug.reportedAt.slice(0, 10)}</span>
